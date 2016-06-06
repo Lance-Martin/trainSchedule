@@ -1,3 +1,10 @@
 .jumbotron {
+  margin-top: 10px;
   text-align: center;
+  background-color: #3071a9;
+}
+
+body {
+  background: url('bodyBackground.jpg');
+  background-size: cover;
 }

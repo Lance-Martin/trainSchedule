@@ -28,26 +28,29 @@ $('#addTrain').on('click', function(event) {
 
 });
 
+function buildTable(){
 myBase.on("child_added", function(childSnapshot, prevChildKey){
-
-	console.log(childSnapshot.val());
-
-	// Store everything into a variable.
 	var tName = childSnapshot.val().name;
 	var tDestination = childSnapshot.val().destination;
 	var tFrequency = childSnapshot.val().often;
 	var tFirst = childSnapshot.val().first;
   var firstTimeConverted = moment(tFirst,"hh:mm").subtract(1, "years");
-  //var currentTime = moment();
+  var currentTime = moment();
   var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
   var tRemainder = diffTime % tFrequency;
   var tMinutesTillTrain = tFrequency - tRemainder;
   var nextTrain = moment().add(tMinutesTillTrain, "minutes");
   var nextTime = moment(nextTrain).format("hh:mm");
-
 	// Add each train's data into the table
 	$("tbody").append("<tr><td>" + tName + "</td><td>" + tDestination + "</td><td>" + tFrequency + "</td><td>" + nextTime + "</td><td>" + tMinutesTillTrain + "</td></tr>");
-
 });
+}
+
+buildTable();
+
+setInterval(function(){
+    $('tbody').empty();
+    buildTable();
+},1000*60);
 
 });
