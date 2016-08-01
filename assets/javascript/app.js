@@ -3,14 +3,18 @@ var url='https://lancetrainschedule.firebaseio.com/';
 var myBase = new Firebase(url);
 console.log("page was loaded");
 
+
+//On click for when the user clicks submit
 $('#addTrain').on('click', function(event) {
   event.preventDefault();
+  //Grab the input values
   var trainName = $('#trainName').val().trim();
   var trainDestination = $('#destination').val().trim();
   var firstTime =$('#startInput').val().trim();
   console.log($('#frequency').val());
   var frequency =$('#frequency').val().trim();
 
+  //Create a new object called "train"
   var train = {
     name: trainName,
     destination: trainDestination,
@@ -18,9 +22,10 @@ $('#addTrain').on('click', function(event) {
     first: firstTime,
   };
 
-  console.log(train);
+  //Push the train object to firebase
   myBase.push(train);
 
+  //Clear the input values
   trainName = $('#trainName').val("");
   trainDestination = $('#destination').val("");
   firstTime =$('#startInput').val("");
@@ -28,7 +33,12 @@ $('#addTrain').on('click', function(event) {
 
 });
 
+
+//Function that builds the table
 function buildTable(){
+myBase.off("child_added");
+
+//When a child is added to the firebase
 myBase.on("child_added", function(childSnapshot, prevChildKey){
 	var tName = childSnapshot.val().name;
 	var tDestination = childSnapshot.val().destination;
@@ -48,6 +58,7 @@ myBase.on("child_added", function(childSnapshot, prevChildKey){
 
 buildTable();
 
+//Updates the table every 60 seconds
 setInterval(function(){
     $('tbody').empty();
     buildTable();
